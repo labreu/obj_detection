@@ -152,3 +152,23 @@ Model to reach a TotalLoss of at least 2 (ideally 1 and lower) if you want to ac
 
 While the evaluation process is running, it will periodically (every 300 sec by default) check and use the latest training/model.ckpt-* checkpoint files to evaluate the performance of the model. The results are stored in the form of tf event files (events.out.tfevents.*) inside training/eval_0. These files can then be used to monitor the computed metrics, using the process described by the next section.
 
+### Export Inference graph
+```shell
+cd
+cp models/research/object_detection/export_inference_graph.py obj_detection/
+```
+
+Ver maior model.ckpt-XXXX.meta
+
+```shell
+python3 export_inference_graph.py \
+    --input_type=image_tensor \
+    --pipeline_config_path=ssdlite_mobilenet_v2_coco.config \
+    --output_directory=. \
+    --trained_checkpoint_prefix=model.ckpt-32376
+
+ls -laht
+```
+
+
+
