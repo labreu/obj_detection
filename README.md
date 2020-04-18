@@ -168,7 +168,15 @@ python3 export_inference_graph.py \
     --trained_checkpoint_prefix=model.ckpt-32376
 
 ls -laht
+
+python3 export_tflite_ssd_graph.py \
+    --pipeline_config_path ssdlite_mobilenet_v2_coco.config \
+    --trained_checkpoint_prefix model.ckpt-32376 \
+    --output_directory tflite
+
 ```
 
-
-
+# Predict
+```shell
+python3 predict_boxes.py
+```
