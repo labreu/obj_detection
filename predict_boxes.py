@@ -1,10 +1,12 @@
-import os
 import glob
 
 # Path to frozen detection graph. This is the actual model that is used for the object detection.
-PATH_TO_LABELS = 'label_map.pbtxt'
-TEST_IMAGE_PATHS = glob.glob('test_images/*.png')
-pb_file = "frozen_inference_graph.pb"
+PATH_TO_LABELS = 'annotations/label_map.pbtxt'
+TEST_IMAGE_PATHS = glob.glob('test_images/*.jpg')
+pbfile = "frozen_inference_graph.pb"
+num_classes = 1
+
+print(TEST_IMAGE_PATHS)
 
 import numpy as np
 import os
@@ -25,7 +27,7 @@ from object_detection.utils import ops as utils_ops
 
 
 # This is needed to display the images.
-%matplotlib inline
+# %matplotlib inline
 
 
 from object_detection.utils import label_map_util
@@ -134,7 +136,8 @@ for image_path in TEST_IMAGE_PATHS:
         use_normalized_coordinates=True,
         line_thickness=3)
     plt.figure(figsize=IMAGE_SIZE)
-    plt.imshow(image_np)
+    #plt.imshow(image_np)
+    plt.savefig(image_path.replace('.jpg', '_test.jpg'))
 
 
     
