@@ -2,25 +2,16 @@
 ### Robos
 - https://imagetagger.bit-bots.de/images/imageset/610/
 
+
+## Para AWS
+Deep Learning AMI (Ubuntu 16.04) Version 27.0 - ami-0a79b70001264b442
+
 ### Conectar com Remote Development do VS Code na maquina
 
 ```shell
+source activate tensorflow_p36
 
 git clone https://github.com/tensorflow/models.git
-pip3 install --ignore-installed --upgrade tensorflow-gpu==1.14
-
-sudo apt-get install protobuf-compiler python-pil python-lxml python-tk -y
-pip3 install --user Cython
-pip3 install --user contextlib2
-pip3 install --user jupyter
-pip3 install --user matplotlib
-
-```
-
-
-
-
-```shell
 cd models/research/
 source ~/.bashrc
 wget -O protobuf.zip https://github.com/google/protobuf/releases/download/v3.0.0/protoc-3.0.0-linux-x86_64.zip
@@ -32,6 +23,31 @@ export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim
 python3 object_detection/builders/model_builder_test.py
 ```
 
+ou
+
+
+```shell
+pip3 install --ignore-installed --upgrade tensorflow-gpu==1.14
+pip3 install --user Cython
+pip3 install --user contextlib2
+pip3 install --user jupyter
+pip3 install --user matplotlib
+
+```
+
+
+```shell
+cd
+git clone https://github.com/lucasrabreu/obj_detection
+cd obj_detection
+mkdir images
+cd images
+wget https://objdetectionfei.s3.amazonaws.com/imageset_610.zip
+unzip imageset_610.zip
+wget https://objdetectionfei.s3.amazonaws.com/labels.zip
+unzip labels.zip
+```
+
 ## Treinando custom classifier
 https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/training.html
 
@@ -39,24 +55,23 @@ https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/traini
 #### Baixar partition_dataser.py do site https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/training.html
 
 ```shell
-wget https://objdetectionfei.s3.amazonaws.com/imageset_610.zip
+cd ..
 
-python3 clean_unused_imgs.py 
-python3 partition_dataser.py -x -i images/ -r 0.1
-
+python3 clean_unused_imgs.py
+python3 partition_dataser.py -x -i images/ -r 0.
 mkdir annotations
 vim annotations/label_map.pbtxt
+
 ```
 
-item {
-    id: 1
+item { 
+    id: 1 
     name: ‘ball'
-}
+} 
 
 ```shell
 python3 xml_to_csv.py -i images/train -o annotations/train_labels.csv
-python3 xml_to_csv.py -i images/test -o annotations/test_labels
-
+python3 xml_to_csv.py -i images/test -o annotations/test_labels.csv
 
 python3 generate_tfrecord.py --label=ball --csv_input=annotations/train_labels.csv --output_path=annotations/train.record --img_path=images/train
 
@@ -67,19 +82,18 @@ python3 generate_tfrecord.py --label=ball --csv_input=annotations/test_labels.cs
 #### Ver modelos em: https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md#coco-trained-models-coco-models
 
 ```shell
-wget link_modelo
-tar -xzvf ssd_mobilenet_v1_coco.tar.gz
+wget http://download.tensorflow.org/models/object_detection/ssdlite_mobilenet_v2_coco_2018_05_09.tar.gz
+
+tar -xzvf ssdlite_mobilenet_v2_coco_2018_05_09.tar.gz
+
+mv ssdlite_mobilenet_v2_coco_2018_05_09 pre-trained-model
 ```
 
-
-Rename do modelo:
-```shell
-mv ssd_inception_v2_coco_2018_01_28/ pre-trained-model
-```
 
 E tambem o arquivo de config: https://github.com/tensorflow/models/tree/master/research/object_detection/samples/configs
 ```shell
-wget link_conf
+#ja tem no repo wget https://github.com/tensorflow/models/blob/master/research/object_detection/samples/configs/ssdlite_mobilenet_v2_coco.config
+
 ```
 
 #### No arquivo de config mudar
@@ -116,20 +130,20 @@ eval_input_reader: {
 
 ## Configurar COCO
 ```shell
+cd
 git clone https://github.com/cocodataset/cocoapi.git
 cd cocoapi/PythonAPI
 make
-cp -r pycocotools/ ~/models/research 
+cd
+cp -r cocoapi/PythonAPI/pycocotools/ models/research/
 ```
-#original era: cp -r pycocotools <PATH_TO_TF>/TensorFlow/models/research/
-
 
 ## Treinando
 ```shell
-cd ~/models/research
-cp object_detection/model_main.py .
+cd obj_detection
+cp models/research/object_detection/model_main.py obj_detection/
 
-python3 model_main.py --alsologtostderr --model_dir=. --pipeline_config_path=ssd_inception_v2_coco.config
+!python3 model_main.py --alsologtostderr --model_dir=. --pipeline_config_path=ssdlite_mobilenet_v2_coco.config
 ```
 
 ## Obs
