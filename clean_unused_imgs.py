@@ -1,7 +1,14 @@
 import glob
 import os
-base_folder = 'images'
-unused_folder = 'unused_imgs'
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('--base', required=True, type=str)
+parser.add_argument('--unused', default='unused_imgs', type=str)
+
+args = parser.parse_args()
+base_folder = args.base
+unused_folder = args.unused
+
 path_unused = os.path.join(base_folder, unused_folder)
 
 os.makedirs(path_unused, exist_ok=True)
