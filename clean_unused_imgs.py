@@ -18,7 +18,7 @@ imgs = (glob.glob(os.path.join(base_folder, '*jpg')) +
 
 c = 0
 for img in imgs:
-    xml_path = img.split('.')[0] + '.xml'
+    xml_path = os.path.splitext(img)[0] + '.xml'
     if not os.path.exists(xml_path):
         #print('from: ', img)
         #print('to: ', os.path.join(path_unused, os.path.basename(img)))
