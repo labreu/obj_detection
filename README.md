@@ -158,7 +158,7 @@ cp -r cocoapi/PythonAPI/pycocotools/ models/research/
 cd obj_detection
 cp models/research/object_detection/model_main.py obj_detection/
 
-!python3 model_main.py --alsologtostderr --model_dir=. --pipeline_config_path=ssdlite_mobilenet_v2_coco.config
+python3 model_main.py --alsologtostderr --model_dir=newmodel --pipeline_config_path=ssdlite_mobilenet_v2_coco.config
 ```
 
 ## Obs
