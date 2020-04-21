@@ -139,6 +139,9 @@ eval_input_reader: {
   num_readers: 1
 }
 
+### Opcoes de data augmentation
+https://github.com/tensorflow/models/blob/master/research/object_detection/builders/preprocessor_builder_test.py
+
 
 ## Configurar COCO
 ```shell
