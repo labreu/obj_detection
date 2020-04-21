@@ -26,10 +26,10 @@ from collections import namedtuple, OrderedDict
 flags = tf.app.flags
 flags.DEFINE_string('csv_input', '', 'Path to the CSV input')
 flags.DEFINE_string('output_path', '', 'Path to output TFRecord')
-flags.DEFINE_string('label', '', 'Name of class label')
+# flags.DEFINE_string('label', '', 'Name of class label')
 # if your image has more labels input them as
-# flags.DEFINE_string('label0', '', 'Name of class[0] label')
-# flags.DEFINE_string('label1', '', 'Name of class[1] label')
+flags.DEFINE_string('label0', '', 'Name of class[0] label')
+flags.DEFINE_string('label1', '', 'Name of class[1] label')
 # and so on.
 flags.DEFINE_string('img_path', '', 'Path to images')
 FLAGS = flags.FLAGS
@@ -38,7 +38,13 @@ FLAGS = flags.FLAGS
 # TO-DO replace this with label map
 # for multiple labels add more else if statements
 def class_text_to_int(row_label):
-    return 1
+    if row_label == FLAGS.label0:
+        return 1
+    elif row_label == FLAGS.label1:
+        return 0
+    else:
+        print(row_label)
+        assert False, "Erro nas labels"
 
 
 def split(df, group):

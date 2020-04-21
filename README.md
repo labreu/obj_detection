@@ -57,8 +57,8 @@ https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/traini
 ```shell
 cd ..
 
-python3 clean_unused_imgs.py
-python3 partition_dataser.py -x -i images/ -r 0.
+python3 clean_unused_imgs.py --base images
+python3 partition_dataser.py -x -i images/ -r 0.1
 mkdir annotations
 vim annotations/label_map.pbtxt
 
@@ -69,6 +69,11 @@ item {
     name: ‘ball'
 } 
 
+item {
+    id: 2
+    name: 'dog'
+}
+
 ```shell
 python3 xml_to_csv.py -i images/train -o annotations/train_labels.csv
 python3 xml_to_csv.py -i images/test -o annotations/test_labels.csv
@@ -76,6 +81,13 @@ python3 xml_to_csv.py -i images/test -o annotations/test_labels.csv
 python3 generate_tfrecord.py --label=ball --csv_input=annotations/train_labels.csv --output_path=annotations/train.record --img_path=images/train
 
 python3 generate_tfrecord.py --label=ball --csv_input=annotations/test_labels.csv --output_path=annotations/test.record --img_path=images/test
+
+###########
+
+
+python3 generate_tfrecord.py --label0=ball --label1=robot --csv_input=annotations/train_labels.csv --output_path=annotations/train.record --img_path=images/train
+
+python3 generate_tfrecord.py  --label0=ball --label1=robot --csv_input=annotations/test_labels.csv --output_path=annotations/test.record --img_path=images/test
 ```
 
 
