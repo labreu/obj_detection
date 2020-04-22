@@ -9,22 +9,23 @@ from utils import visualization_utils as vis_util
 PATH_TO_FROZEN_GRAPH = 'frozen_inference_graph.pb'
 
 # path to the label map
-PATH_TO_LABEL_MAP = 'annotations/label_map.pbtxt'
+PATH_TO_LABEL_MAP = 'label_map.pbtxt'
 
 # number of classes 
 NUM_CLASSES = 2
 
 cap = cv2.VideoCapture(0)
+def load_model():
+    with tf.gfile.GFile(PATH_TO_FROZEN_GRAPH, "rb") as f:
+        graph_def = tf.GraphDef()
+        graph_def.ParseFromString(f.read())
+
+    with tf.Graph().as_default() as graph:
+        tf.import_graph_def(graph_def, name="")
+    return graph
 
 #reads the frozen graph
-detection_graph = tf.Graph()
-with detection_graph.as_default():
-    od_graph_def = tf.GraphDef()
-    with tf.gfile.GFile(PATH_TO_FROZEN_GRAPH, 'rb') as fid:
-        serialized_graph = fid.read()
-        od_graph_def.ParseFromString(serialized_graph)
-        tf.import_graph_def(od_graph_def, name='')
-
+detection_graph = load_model()
 label_map = label_map_util.load_labelmap(PATH_TO_LABEL_MAP)
 categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
 category_index = label_map_util.create_category_index(categories)
@@ -63,7 +64,7 @@ with detection_graph.as_default():
                 line_thickness=3,
                 )
         # Display output
-            cv2.imshow('Detection', cv2.resize(image_np, (1200, 800)))
+            cv2.imshow('Detection', cv2.resize(image_np, (600, 800)))
             if cv2.waitKey(25) & 0xFF == ord('q'):
                 cv2.destroyAllWindows()
                 break
