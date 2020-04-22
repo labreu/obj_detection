@@ -182,8 +182,15 @@ python3 export_tflite_ssd_graph.py \
     --pipeline_config_path ssdlite_mobilenet_v2_coco.config \
     --trained_checkpoint_prefix model.ckpt-32376 \
     --output_directory tflite
+ou
 
+nohup python3 model_main.py --alsologtostderr --model_dir=newmodel2 --pipeline_config_path=ssdlite_mobilenet_v2_coco_v2.config &
 ```
+## Metrics
+```shell
+nohup tensorboard --logdir=newmodel/ &
+```
+
 
 ## Predict
 ```shell
