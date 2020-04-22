@@ -1,22 +1,18 @@
-## Fontes de dados
-### Robos
-- https://imagetagger.bit-bots.de/images/imageset/610/
+# Detecao de objetos no dominio do futebol de robos
 
+## Treinamento de rede neural feito na AWS
+- Deep Learning AMI (Ubuntu 16.04) Version 27.0 - ami-0a79b70001264b442
 
-## Para AWS
-Deep Learning AMI (Ubuntu 16.04) Version 27.0 - ami-0a79b70001264b442
-
-### Conectar com Remote Development do VS Code na maquina
+## Conectar com Remote Development do VS Code na maquina
 
 ```shell
 source activate tensorflow_p36
 
 git clone https://github.com/tensorflow/models.git
 cd models/research/
-source ~/.bashrc
+
 wget -O protobuf.zip https://github.com/google/protobuf/releases/download/v3.0.0/protoc-3.0.0-linux-x86_64.zip
 unzip protobuf.zip
-
 ./bin/protoc object_detection/protos/*.proto --python_out=.
 
 export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim
@@ -50,9 +46,6 @@ unzip labels.zip
 
 ## Treinando custom classifier
 https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/training.html
-
-
-#### Baixar partition_dataser.py do site https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/training.html
 
 ```shell
 cd ..
@@ -91,7 +84,7 @@ python3 generate_tfrecord.py  --label0=ball --label1=robot --csv_input=annotatio
 ```
 
 
-#### Ver modelos em: https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md#coco-trained-models-coco-models
+### Ver modelos em: https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md#coco-trained-models-coco-models
 
 ```shell
 wget http://download.tensorflow.org/models/object_detection/ssdlite_mobilenet_v2_coco_2018_05_09.tar.gz
@@ -108,7 +101,7 @@ E tambem o arquivo de config: https://github.com/tensorflow/models/tree/master/r
 
 ```
 
-#### No arquivo de config mudar
+### No arquivo de config mudar
 - num_classes: 1 na linha 9 na model/ssd
 - type: ‘ssd_inception_v2’ na linha 77 nas feature_extractor
 - batch_size: 12 na linha 136 nas train configs se houver mais memória
@@ -158,16 +151,17 @@ cp -r cocoapi/PythonAPI/pycocotools/ models/research/
 cd obj_detection
 cp models/research/object_detection/model_main.py obj_detection/
 
-python3 model_main.py --alsologtostderr --model_dir=newmodel --pipeline_config_path=ssdlite_mobilenet_v2_coco.config
+!python3 model_main.py --alsologtostderr --model_dir=. --pipeline_config_path=ssdlite_mobilenet_v2_coco.config
 ```
 
-## Obs
+## Boas praticas
 
 Model to reach a TotalLoss of at least 2 (ideally 1 and lower) if you want to achieve “fair” detection results.
 
 While the evaluation process is running, it will periodically (every 300 sec by default) check and use the latest training/model.ckpt-* checkpoint files to evaluate the performance of the model. The results are stored in the form of tf event files (events.out.tfevents.*) inside training/eval_0. These files can then be used to monitor the computed metrics, using the process described by the next section.
 
-### Export Inference graph
+
+## Export Inference graph
 ```shell
 cd
 cp models/research/object_detection/export_inference_graph.py obj_detection/
@@ -179,8 +173,8 @@ Ver maior model.ckpt-XXXX.meta
 python3 export_inference_graph.py \
     --input_type=image_tensor \
     --pipeline_config_path=ssdlite_mobilenet_v2_coco.config \
-    --output_directory=. \
-    --trained_checkpoint_prefix=model.ckpt-32376
+    --output_directory=model_2obj_infgraph \
+    --trained_checkpoint_prefix=model_2obj/model.ckpt-29578
 
 ls -laht
 
@@ -191,7 +185,12 @@ python3 export_tflite_ssd_graph.py \
 
 ```
 
-# Predict
+## Predict
 ```shell
 python3 predict_boxes.py
 ```
+
+
+# Referencias
+- https://imagetagger.bit-bots.de/images/imageset/610/
+- https://github.com/bit-bots/bitbots_vision
