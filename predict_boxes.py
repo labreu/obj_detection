@@ -1,10 +1,15 @@
 import glob
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--pbfile', default="frozen_inference_graph.pb", required=True, type=str)
+args = parser.parse_args()
+pbfile = args.pbfile
 # Path to frozen detection graph. This is the actual model that is used for the object detection.
 PATH_TO_LABELS = 'annotations/label_map.pbtxt'
 TEST_IMAGE_PATHS = glob.glob('test_imgs/*.jpg')
-pbfile = "frozen_inference_graph.pb"
-num_classes = 1
+
+num_classes = 2
 
 print(TEST_IMAGE_PATHS)
 
