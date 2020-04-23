@@ -137,6 +137,7 @@ https://github.com/tensorflow/models/blob/master/research/object_detection/build
 
 
 ## Configurar COCO
+http://cocodataset.org/#detection-eval
 ```shell
 cd
 git clone https://github.com/cocodataset/cocoapi.git
