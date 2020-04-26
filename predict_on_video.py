@@ -1,10 +1,30 @@
+######## Video Object Detection Using Tensorflow-trained Classifier #########
+#
+# Author: Evan Juras
+# Date: 1/16/18
+# Description: 
+# This program uses a TensorFlow-trained classifier to perform object detection.
+# It loads the classifier and uses it to perform object detection on a video.
+# It draws boxes, scores, and labels around the objects of interest in each
+# frame of the video.
+
+## Some of the code is copied from Google's example at
+## https://github.com/tensorflow/models/blob/master/research/object_detection/object_detection_tutorial.ipynb
+
+## and some is copied from Dat Tran's example at
+## https://github.com/datitran/object_detector_app/blob/master/object_detection_app.py
+
+## but I changed it to make it more understandable to me.
+
+# Import packages
 import os
 import cv2
 import numpy as np
 import tensorflow as tf
 import sys
+import time
 
-# Script is stored in the object_detection folder
+# This is needed since the notebook is stored in the object_detection folder.
 sys.path.append("..")
 
 # Import utilites
@@ -12,17 +32,18 @@ from utils import label_map_util
 from utils import visualization_utils as vis_util
 
 # Name of the directory containing the object detection module we're using
-VIDEO_NAME = 'robocup.mp4'
+MODEL_NAME = 'inference_graph'
+VIDEO_NAME = sys.argv[1]
 
 # Grab path to current working directory
 CWD_PATH = os.getcwd()
 
 # Path to frozen detection graph .pb file, which contains the model that is used
 # for object detection.
-PATH_TO_CKPT = os.path.join(CWD_PATH,'saved_model.pb')
+PATH_TO_CKPT = os.path.join(CWD_PATH,'frozen_inference_graph.pb')
 
 # Path to label map file
-PATH_TO_LABELS = os.path.join(CWD_PATH,'saved_model.pbtxt')
+PATH_TO_LABELS = os.path.join(CWD_PATH,'label_map.pbtxt')
 
 # Path to video
 PATH_TO_VIDEO = os.path.join(CWD_PATH,VIDEO_NAME)
@@ -43,7 +64,7 @@ category_index = label_map_util.create_category_index(categories)
 detection_graph = tf.Graph()
 with detection_graph.as_default():
     od_graph_def = tf.GraphDef()
-    with tf.gfile.GFile(PATH_TO_CKPT, 'rb') as fid:
+    with tf.io.gfile.GFile(PATH_TO_CKPT, 'rb') as fid:
         serialized_graph = fid.read()
         od_graph_def.ParseFromString(serialized_graph)
         tf.import_graph_def(od_graph_def, name='')
@@ -69,12 +90,18 @@ num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 
 # Open video file
 video = cv2.VideoCapture(PATH_TO_VIDEO)
+fps_str = ''
+frame = []
 
 while(video.isOpened()):
 
+    t1 = time.time()
     # Acquire frame and expand frame dimensions to have shape: [1, None, None, 3]
     # i.e. a single-column array, where each item in the column has the pixel RGB value
     ret, frame = video.read()
+    cv2.putText(img=frame, text=fps_str, org=(20, 40), fontFace=1, fontScale=1, 
+                color=(0, 0, 255), thickness=1, lineType=8)
+
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     frame_expanded = np.expand_dims(frame_rgb, axis=0)
 
@@ -91,15 +118,20 @@ while(video.isOpened()):
         np.squeeze(scores),
         category_index,
         use_normalized_coordinates=True,
-        line_thickness=8,
+        line_thickness=3,
         min_score_thresh=0.60)
 
-    # All the results have been drawn on the frame, so it's time to display it.
+    # Display frame
     cv2.imshow('Object detector', frame)
 
-    # Press 'q' to quit
+    # 'q' to quit
     if cv2.waitKey(1) == ord('q'):
         break
+    
+    fps = 1 / (time.time()-t1)
+    fps_str = 'FPS {:.1f}'.format(fps)
+    # print(fps_str)
+    
 
 # Clean up
 video.release()
