@@ -141,6 +141,8 @@ https://github.com/tensorflow/models/blob/master/research/object_detection/build
 - https://blog.zenggyu.com/en/post/2018-12-16/an-introduction-to-evaluation-metrics-for-object-detection/
 
 ```shell
+pip install pycocotools
+
 cd
 git clone https://github.com/cocodataset/cocoapi.git
 cd cocoapi/PythonAPI
@@ -154,7 +156,10 @@ cp -r cocoapi/PythonAPI/pycocotools/ models/research/
 cd obj_detection
 cp models/research/object_detection/model_main.py obj_detection/
 
-!python3 model_main.py --alsologtostderr --model_dir=. --pipeline_config_path=ssdlite_mobilenet_v2_coco.config
+python3 model_main.py --alsologtostderr --model_dir=. --pipeline_config_path=ssdlite_mobilenet_v2_coco.config
+ou
+nohup python3 model_main.py --alsologtostderr --model_dir=newmodel2 --pipeline_config_path=ssdlite_mobilenet_v2_coco_v2.config &
+
 ```
 
 ## Boas praticas
@@ -185,10 +190,8 @@ python3 export_tflite_ssd_graph.py \
     --pipeline_config_path ssdlite_mobilenet_v2_coco.config \
     --trained_checkpoint_prefix model.ckpt-32376 \
     --output_directory tflite
-ou
-
-nohup python3 model_main.py --alsologtostderr --model_dir=newmodel2 --pipeline_config_path=ssdlite_mobilenet_v2_coco_v2.config &
 ```
+
 ## Metrics
 ```shell
 nohup tensorboard --logdir=newmodel/ &
