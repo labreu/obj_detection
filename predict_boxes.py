@@ -7,9 +7,10 @@ args = parser.parse_args()
 pbfile = args.pbfile
 # Path to frozen detection graph. This is the actual model that is used for the object detection.
 PATH_TO_LABELS = 'annotations/label_map.pbtxt'
-TEST_IMAGE_PATHS = glob.glob('test_imgs/*.jpg')
+ext = '.JPG'
+TEST_IMAGE_PATHS = glob.glob('test_imgs/*'+ext)
 
-num_classes = 2
+num_classes = 27
 
 print(TEST_IMAGE_PATHS)
 
@@ -130,6 +131,7 @@ for image_path in TEST_IMAGE_PATHS:
     t1 = time.time()
     output_dict = run_inference_for_single_image(image_np, detection_graph)
     print(time.time() - t1)
+    #print(output_dict)
     # Visualization of the results of a detection.
     vis_util.visualize_boxes_and_labels_on_image_array(
         image_np,
@@ -139,10 +141,22 @@ for image_path in TEST_IMAGE_PATHS:
         category_index,
         instance_masks=output_dict.get('detection_masks'),
         use_normalized_coordinates=True,
-        line_thickness=3)
+        line_thickness=2)
     #plt.figure(figsize=IMAGE_SIZE)
     plt.imshow(image_np)
-    plt.savefig(image_path.replace('.jpg', '_test.jpg'))
+    plt.savefig(image_path.replace(ext, '_test'+ext))
 
 
+def get_labels(boxes, classes, scores, category_index, max_objs=20):
+    dados = []
+    for i in range(len(boxes))[:max_objs]:
+        dados.append((classes[i], category_index[classes[i]], scores[i]))
+    import pandas as pd
+    d = pd.DataFrame(dados, ['ClasseIx', 'Classe', 'Score'])
+    return d
     
+d = get_labels(
+    boxes=output_dict['detection_boxes'].tolist(),
+    classes=output_dict['detection_classes'].tolist(),
+    scores=output_dict['detection_scores'].tolist(),category_index=category_index)
+
