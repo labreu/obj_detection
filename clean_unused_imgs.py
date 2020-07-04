@@ -14,7 +14,7 @@ path_unused = os.path.join(base_folder, unused_folder)
 os.makedirs(path_unused, exist_ok=True)
 imgs = (glob.glob(os.path.join(base_folder, '*jpg')) + 
         glob.glob(os.path.join(base_folder, '*JPG')) + 
-        glob.glob(os.path.join(base_folder, '.jpeg')) +
+        glob.glob(os.path.join(base_folder, '*jpeg')) +
         glob.glob(os.path.join(base_folder, '*png')))
 
 c = 0
