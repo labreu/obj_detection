@@ -14,7 +14,7 @@ cd models/research/
 wget -O protobuf.zip https://github.com/google/protobuf/releases/download/v3.0.0/protoc-3.0.0-linux-x86_64.zip
 unzip protobuf.zip
 ./bin/protoc object_detection/protos/*.proto --python_out=.
-
+pip install tf_slim
 export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim
 python3 object_detection/builders/model_builder_test.py
 ```
