@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- 17434 -->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>PoC Ambev</title>
+    <meta http-equiv="refresh" content="60">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144077898-3"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-144077898-3');
+    </script>
+
+
+  </head>
+  <body >
+    <div class='container'>
+        
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+              <h1 class="display-4">PoC Ambev</h1>
+              <p class="lead">Controle de carregamento de caminhões</p>
+            </div>
+        </div>
+
+        <form action = "/uploader" method = "POST" 
+            enctype = "multipart/form-data">
+            <div class="row">
+                <div class="col-sm">
+                    <!-- col1 -->
+                </div>
+                <div class="col-sm">
+                    <!-- col2 -->
+                    <div class="form-group">
+                        <label for="file">Envie uma imagem e aguarde o processamento automático</label><br>
+                        <input class="form-control" type = "file" id="file" name="file" />
+                        <br>
+                        
+                        <input class="btn btn-primary btn-sm" id="submit" value="Upload" type = "submit" name="Ok"/>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <!-- col3 -->
+                </div>
+            </div>
+        </form>   
+
+        <ul>
+            <ol> 
+                {% if files | length %}
+            <h3>Lista de imagens</h3>
+            {%for f in files%} 
+            
+                <li>
+                    <a href='{{f}}'>{{f}}</a> 
+                    <!-- <form action="/predict" method='POST'>
+                        <input type="hidden" type="text" value="{{f}}" name="fname" id="fname">
+                        <input type="submit" value="Analisar" class="btn btn-secondary btn-sm" />
+                    </form> -->
+                </li> 
+            {%endfor%} 
+            {%endif%}
+            </ol> 
+            <br>
+            <hr>
+            <br>
+            <ol>
+                {% if files_pred | length %}
+                    <h3>Lista de imagens já analiadas</h3>
+                    {%for f in files_pred%} 
+                    
+                        <li>
+                            <a href='{{f}}'>{{f}}</a> 
+                            <!-- <form action="/predict" method='POST'>
+                                <input type="hidden" type="text" value="{{f}}" name="fname" id="fname">
+                                <input type="submit" value="Analisar" class="btn btn-secondary btn-sm" />
+                            </form> -->
+                        </li> 
+                    {%endfor%} 
+                {%endif%}
+                
+                </ol> 
+        </ul>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>
+
+
+
