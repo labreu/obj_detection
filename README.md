@@ -84,7 +84,7 @@ python3 generate_tfrecord.py  --label0=ball --label1=robot --csv_input=annotatio
 ```
 
 
-### Ver modelos em: https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md#coco-trained-models-coco-models
+### Ver modelos em: https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf1_detection_zoo.md
 
 ```shell
 wget http://download.tensorflow.org/models/object_detection/ssdlite_mobilenet_v2_coco_2018_05_09.tar.gz
