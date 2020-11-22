@@ -113,10 +113,12 @@ def run_inference_benchmark(image, graph, trial=20, gpu=True):
 
     return fps
 
-image = Image.open(TEST_IMAGE_PATHS[-1])
+#image = Image.open(TEST_IMAGE_PATHS[-1])
 # the array based representation of the image will be used later in order to prepare the
 # result image with boxes and labels on it.
-image_np = load_image_into_numpy_array(image)
+#image_np = load_image_into_numpy_array(image)
+import cv2
+image_np = cv2.imread(TEST_IMAGE_PATHS[-1],1)
 # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
 image_np_expanded = np.expand_dims(image_np, axis=0)
 # Actual detection benchmark.
